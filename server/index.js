@@ -1,6 +1,8 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
+const bodyParser = require('body-parser')
+const { check, validationResult } = require('express-validator')
 const app = express()
 
 // Import and Set Nuxt.js options
@@ -20,6 +22,28 @@ async function start() {
   } else {
     await nuxt.ready()
   }
+
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: false }))
+
+  app.post(
+    '/api/users',
+    [
+      check('email')
+        .isEmail()
+        .normalizeEmail(),
+      check('password').isLength({ min: 6 })
+    ],
+    (req, res) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        console.log(errors)
+        return res.status(422).json({ errors: errors.array() })
+      }
+      console.log(req.body)
+      // Database code will go below
+    }
+  )
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
