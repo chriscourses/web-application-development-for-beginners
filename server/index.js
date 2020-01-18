@@ -3,6 +3,7 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser')
 const { check, validationResult } = require('express-validator')
+const bcrypt = require('bcryptjs')
 const app = express()
 
 // Import and Set Nuxt.js options
@@ -36,15 +37,26 @@ async function start() {
         .normalizeEmail(),
       check('password').isLength({ min: 6 })
     ],
-    (req, res) => {
+    async (req, res) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         console.log(errors)
         return res.status(422).json({ errors: errors.array() })
       }
       console.log(req.body)
+
       // Database code will go below
-      models.User.create({ email: req.body.email, password: req.body.password })
+      try {
+        const salt = await bcrypt.genSalt(10)
+
+        const hash = await bcrypt.hash(req.body.password, salt)
+        models.User.create({
+          email: req.body.email,
+          password: hash
+        })
+      } catch (err) {
+        console.log(err)
+      }
     }
   )
 
