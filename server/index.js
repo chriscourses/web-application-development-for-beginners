@@ -4,6 +4,7 @@ const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser')
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
+const session = require('express-session')
 const app = express()
 
 // Import and Set Nuxt.js options
@@ -28,6 +29,13 @@ async function start() {
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(
+    session({
+      secret: 'ab1ca3cc62b0afcb2c6c3156',
+      resave: false,
+      saveUninitialized: false
+    })
+  )
 
   app.post(
     '/api/users',
@@ -54,6 +62,12 @@ async function start() {
           email: req.body.email,
           password: hash
         })
+
+        req.session.user = {
+          isAuthenticated: true
+        }
+
+        res.status(200).end()
       } catch (err) {
         console.log(err)
       }
