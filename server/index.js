@@ -67,7 +67,7 @@ async function start() {
           isAuthenticated: true
         }
 
-        res.status(200).end()
+        res.status(200).json(req.session.user)
       } catch (err) {
         console.log(err)
       }

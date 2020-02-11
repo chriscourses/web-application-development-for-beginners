@@ -73,6 +73,7 @@ export default {
         })
         .then((response) => {
           console.log(response)
+          this.$store.commit('SET_USER', response.data)
         })
         .catch((error) => {
           console.log(error)
