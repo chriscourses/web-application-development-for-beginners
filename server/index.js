@@ -74,6 +74,12 @@ async function start() {
     }
   )
 
+  app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+      res.end()
+    })
+  })
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
