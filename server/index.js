@@ -48,10 +48,8 @@ async function start() {
     async (req, res) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
-        console.log(errors)
         return res.status(422).json({ errors: errors.array() })
       }
-      console.log(req.body)
 
       // Database code will go below
       try {
@@ -70,6 +68,48 @@ async function start() {
         res.status(200).json(req.session.user)
       } catch (err) {
         console.log(err)
+      }
+    }
+  )
+
+  app.post(
+    '/api/users/login',
+    [
+      check('email')
+        .isEmail()
+        .normalizeEmail(),
+      check('password').isLength({ min: 6 })
+    ],
+    async (req, res) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() })
+      } else {
+        // Login here
+        const user = await models.User.findOne({
+          where: {
+            email: req.body.email
+          }
+        })
+
+        if (!user) {
+          res.status(401).end('email does not exist')
+        }
+
+        // user.password
+        // bcrypt.compare()
+        const isValid = await bcrypt.compare(req.body.password, user.password)
+
+        if (isValid === false) {
+          res.status(401).end('username or password invalid')
+        }
+
+        req.session.user = {
+          isAuthenticated: true
+        }
+
+        // continue code
+        res.json(req.session.user)
       }
     }
   )
