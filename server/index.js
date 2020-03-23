@@ -56,14 +56,17 @@ async function start() {
         const salt = await bcrypt.genSalt(10)
 
         const hash = await bcrypt.hash(req.body.password, salt)
-        models.User.create({
+        let user = await models.User.create({
           email: req.body.email,
           password: hash
         })
 
-        req.session.user = {
-          isAuthenticated: true
-        }
+        user = user.toJSON()
+        user.isAuthenticated = true
+        delete user.password
+
+        req.session.user = user
+        console.log(req.session.user)
 
         res.status(200).json(req.session.user)
       } catch (err) {
@@ -86,7 +89,7 @@ async function start() {
         return res.status(422).json({ errors: errors.array() })
       } else {
         // Login here
-        const user = await models.User.findOne({
+        let user = await models.User.findOne({
           where: {
             email: req.body.email
           }
@@ -104,9 +107,11 @@ async function start() {
           res.status(401).end('username or password invalid')
         }
 
-        req.session.user = {
-          isAuthenticated: true
-        }
+        user = user.toJSON()
+        user.isAuthenticated = true
+        delete user.password
+
+        req.session.user = user
 
         // continue code
         res.json(req.session.user)

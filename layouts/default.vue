@@ -2,7 +2,7 @@
   <div>
     <nav class="bg-white shadow-sm">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between items-center h-16">
           <div class="flex">
             <div class="hidden sm:ml-6 sm:flex">
               <nuxt-link
@@ -34,6 +34,19 @@
               </a>
             </div>
           </div>
+          <nuxt-link to="/profile" v-if="$store.state.user">
+            <svg
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              class="mt-1 w-8 h-8 text-gray-500"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </nuxt-link>
         </div>
       </div>
     </nav>
@@ -49,6 +62,10 @@ export default {
       try {
         await this.$axios.post('/api/logout')
         this.$store.commit('SET_USER', null)
+
+        if (this.$route.path === '/profile') {
+          this.$router.push('/')
+        }
       } catch (err) {
         throw new Error(err)
       }
