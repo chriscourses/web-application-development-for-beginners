@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen flex items-center">
+  <div class="h-screen flex items-center py-16">
     <div
-      class="container max-w-md mx-auto xl:max-w-3xl flex bg-white rounded-lg shadow overflow-hidden flex"
+      class="container max-w-md m-auto xl:max-w-3xl flex bg-white rounded-lg shadow overflow-hidden flex"
     >
       <div class="relative hidden xl:block xl:w-1/2 h-full">
         <img
@@ -64,19 +64,23 @@ export default {
       password: ''
     }
   },
+  fetch({ store, redirect }) {
+    if (store.state.user) {
+      return redirect('/')
+    }
+  },
   methods: {
-    submitForm() {
-      this.$axios
-        .post('/api/users/login', {
+    async submitForm() {
+      try {
+        const response = await this.$axios.post('/api/users/login', {
           email: this.email,
           password: this.password
         })
-        .then((response) => {
-          this.$store.commit('SET_USER', response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+        this.$store.commit('SET_USER', response.data)
+        this.$router.push('/account')
+      } catch (err) {
+        throw new Error(err)
+      }
     }
   }
 }

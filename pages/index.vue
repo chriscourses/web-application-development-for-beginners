@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container mx-auto text-center py-16 px-6">
     <div>
       <logo />
-      <h1 class="title">
+      <h1 class="text-4xl text-gray-800">
         node-authentication
       </h1>
       <h2 class="subtitle">

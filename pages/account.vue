@@ -11,7 +11,7 @@ export default {
       !store.state.user ||
       (store.state.user && store.state.user.isAuthenticated === false)
     ) {
-      return redirect('/registration')
+      return redirect('/register')
     }
   }
 }
