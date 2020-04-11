@@ -25,6 +25,8 @@ router.post(
   UserController.login
 )
 
+router.post('/api/users/resetPassword', UserController.resetPassword)
+
 router.post('/api/logout', (req, res) => {
   req.session.destroy(() => {
     res.end()

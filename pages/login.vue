@@ -50,6 +50,11 @@
               Log in
             </button>
           </div>
+          <div class="text-center mt-3">
+            <nuxt-link class="text-sm" to="/reset-password"
+              >Forgot password?</nuxt-link
+            >
+          </div>
         </form>
       </div>
     </div>

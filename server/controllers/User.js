@@ -65,3 +65,7 @@ exports.login = async (req, res) => {
     res.json(req.session.user)
   }
 }
+
+exports.resetPassword = async (req, res) => {
+  res.end('success')
+}
