@@ -2,6 +2,12 @@ const crypto = require('crypto')
 const moment = require('moment')
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
+const mailgun = require('mailgun-js')
+
+const mg = mailgun({
+  apiKey: process.env.MAILGUN_API_KEY,
+  domain: process.env.MAILGUN_DOMAIN
+})
 const models = require('../models/index.js')
 
 exports.create = async (req, res) => {
@@ -88,6 +94,16 @@ exports.resetPassword = async (req, res) => {
         .add(30, 'minute')
         .format()
     })
+
+    const data = {
+      from:
+        'Mailgun Sandbox <postmaster@sandboxa1ddcd634bef4f0e8dca5c07677e5072.mailgun.org>',
+      to: req.body.email,
+      subject: 'Password Reset Request',
+      text: `http://${req.headers.host}/password-reset/${token}`
+    }
+    const body = await mg.messages().send(data)
+    console.log(body)
 
     res.json(token)
   } catch (err) {
