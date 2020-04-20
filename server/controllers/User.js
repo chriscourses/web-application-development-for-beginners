@@ -1,3 +1,5 @@
+const crypto = require('crypto')
+const moment = require('moment')
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const models = require('../models/index.js')
@@ -67,5 +69,28 @@ exports.login = async (req, res) => {
 }
 
 exports.resetPassword = async (req, res) => {
-  res.end('success')
+  try {
+    const user = await models.User.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+
+    if (!user) {
+      return res.status(404).end('no user with this email exists')
+    }
+
+    const token = crypto.randomBytes(16).toString('hex')
+
+    await user.update({
+      resetPasswordToken: token,
+      resetPasswordTokenExpiration: moment()
+        .add(30, 'minute')
+        .format()
+    })
+
+    res.json(token)
+  } catch (err) {
+    throw new Error(err)
+  }
 }

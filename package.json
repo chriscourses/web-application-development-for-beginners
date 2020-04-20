@@ -30,6 +30,7 @@
     "express": "^4.16.4",
     "express-session": "^1.17.0",
     "express-validator": "6.1.1",
+    "moment": "^2.24.0",
     "mysql2": "1.7.0",
     "nuxt": "^2.0.0",
     "sequelize": "5.18.1"

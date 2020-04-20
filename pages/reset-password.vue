@@ -64,7 +64,8 @@ export default {
         })
         console.log(response)
       } catch (err) {
-        throw new Error(err)
+        console.log(err.response)
+        // throw new Error(err)
       }
     }
   }
