@@ -100,12 +100,30 @@ exports.resetPassword = async (req, res) => {
         'Mailgun Sandbox <postmaster@sandboxa1ddcd634bef4f0e8dca5c07677e5072.mailgun.org>',
       to: req.body.email,
       subject: 'Password Reset Request',
-      text: `http://${req.headers.host}/password-reset/${token}`
+      text: `http://${req.headers.host}/reset-password/${token}`
     }
     const body = await mg.messages().send(data)
     console.log(body)
 
     res.json(token)
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+exports.getUserByResetPasswordToken = async (req, res) => {
+  try {
+    const user = await models.User.findOne({
+      where: {
+        resetPasswordToken: req.params.token
+      }
+    })
+
+    if (!user) {
+      return res.status(500).end('no user found')
+    }
+
+    res.json(user)
   } catch (err) {
     throw new Error(err)
   }

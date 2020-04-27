@@ -3,6 +3,11 @@ const { check } = require('express-validator')
 const UserController = require('./controllers/User.js')
 const router = express.Router()
 
+router.get(
+  '/api/users/tokens/:token',
+  UserController.getUserByResetPasswordToken
+)
+
 router.post(
   '/api/users',
   [
