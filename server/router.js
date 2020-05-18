@@ -3,6 +3,8 @@ const { check } = require('express-validator')
 const UserController = require('./controllers/User.js')
 const router = express.Router()
 
+router.put('/api/users/:id/resetPassword', UserController.resetPassword)
+
 router.get(
   '/api/users/tokens/:token',
   UserController.getUserByResetPasswordToken
@@ -30,7 +32,10 @@ router.post(
   UserController.login
 )
 
-router.post('/api/users/resetPassword', UserController.resetPassword)
+router.post(
+  '/api/users/sendResetPasswordRequest',
+  UserController.sendResetPasswordRequest
+)
 
 router.post('/api/logout', (req, res) => {
   req.session.destroy(() => {

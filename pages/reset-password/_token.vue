@@ -4,13 +4,13 @@
   >
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <p class="text-center text-base leading-5 text-gray-600 max-w-xs mx-auto">
-        Welcome back USER_EMAIL_HERE, please enter your new password below.
+        Welcome back {{ user.email }}, please enter your new password below.
       </p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form>
+        <form @submit.prevent="submit">
           <div>
             <label
               for="password"
@@ -23,6 +23,7 @@
               <input
                 id="password"
                 type="password"
+                v-model="password"
                 required
                 placeholder="******************"
                 class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-purple focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
@@ -47,14 +48,43 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
+  data() {
+    return {
+      password: ''
+    }
+  },
   layout: 'bare',
   async asyncData({ $axios, params, redirect }) {
     try {
-      const response = await $axios.get(`/api/users/tokens/${params.token}`)
-      console.log(response.data)
+      const { data } = await $axios.get(`/api/users/tokens/${params.token}`)
+
+      if (
+        moment() > moment(data.resetPasswordTokenExpiration) ||
+        data.resetPasswordTokenExpiration === null
+      ) {
+        redirect('/')
+      }
+
+      return {
+        user: data
+      }
     } catch (err) {
       if (err) redirect('/')
+    }
+  },
+  methods: {
+    async submit() {
+      try {
+        await this.$axios.put(`/api/users/${this.user.id}/resetPassword`, {
+          password: this.password
+        })
+
+        this.$router.push('/')
+      } catch (err) {
+        throw new Error(err)
+      }
     }
   }
 }

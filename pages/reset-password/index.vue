@@ -59,9 +59,12 @@ export default {
   methods: {
     async submit() {
       try {
-        const response = await this.$axios.post('/api/users/resetPassword', {
-          email: this.email
-        })
+        const response = await this.$axios.post(
+          '/api/users/sendResetPasswordRequest',
+          {
+            email: this.email
+          }
+        )
         console.log(response)
       } catch (err) {
         console.log(err.response)

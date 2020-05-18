@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
   }
 }
 
-exports.resetPassword = async (req, res) => {
+exports.sendResetPasswordRequest = async (req, res) => {
   try {
     const user = await models.User.findOne({
       where: {
@@ -124,6 +124,31 @@ exports.getUserByResetPasswordToken = async (req, res) => {
     }
 
     res.json(user)
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const user = await models.User.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+
+    if (!user) {
+      return res.status(404).end('user does not exist')
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(req.body.password, salt)
+
+    await user.update({
+      password: hash,
+      resetPasswordTokenExpiration: null
+    })
+    res.end()
   } catch (err) {
     throw new Error(err)
   }
