@@ -1,5 +1,5 @@
 const express = require('express')
-const { check } = require('express-validator')
+const { celebrate, Joi, errors, Segments } = require('celebrate')
 const UserController = require('./controllers/User.js')
 const router = express.Router()
 
@@ -12,23 +12,31 @@ router.get(
 
 router.post(
   '/api/users',
-  [
-    check('email')
-      .isEmail()
-      .normalizeEmail(),
-    check('password').isLength({ min: 6 })
-  ],
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string()
+        .required()
+        .email(),
+      password: Joi.string()
+        .required()
+        .min(6)
+    })
+  }),
   UserController.create
 )
 
 router.post(
   '/api/users/login',
-  [
-    check('email')
-      .isEmail()
-      .normalizeEmail(),
-    check('password').isLength({ min: 6 })
-  ],
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string()
+        .required()
+        .email(),
+      password: Joi.string()
+        .required()
+        .min(6)
+    })
+  }),
   UserController.login
 )
 
@@ -43,4 +51,5 @@ router.post('/api/logout', (req, res) => {
   })
 })
 
+router.use(errors())
 module.exports = router

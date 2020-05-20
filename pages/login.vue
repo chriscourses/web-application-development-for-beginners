@@ -84,7 +84,8 @@ export default {
         this.$store.commit('SET_USER', response.data)
         this.$router.push('/account')
       } catch (err) {
-        throw new Error(err)
+        console.log(err.response)
+        // throw new Error(err)
       }
     }
   }
