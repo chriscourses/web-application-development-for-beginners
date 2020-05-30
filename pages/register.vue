@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
 export default {
   data() {
     return {
@@ -78,8 +79,12 @@ export default {
         })
         this.$store.commit('SET_USER', response.data)
         this.$router.push('/account')
-      } catch (err) {
-        throw new Error(err)
+      } catch ({ response }) {
+        swal({
+          title: 'Error',
+          text: response.data.message,
+          icon: 'error'
+        })
       }
     }
   }

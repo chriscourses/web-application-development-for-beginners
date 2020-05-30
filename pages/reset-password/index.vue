@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
 export default {
   data() {
     return {
@@ -59,16 +60,17 @@ export default {
   methods: {
     async submit() {
       try {
-        const response = await this.$axios.post(
-          '/api/users/sendResetPasswordRequest',
-          {
-            email: this.email
-          }
-        )
+        await this.$axios.post('/api/users/sendResetPasswordRequest', {
+          email: this.email
+        })
+      } catch ({ response }) {
         console.log(response)
-      } catch (err) {
-        console.log(err.response)
-        // throw new Error(err)
+        console.log('go')
+        swal({
+          title: 'Error',
+          text: response.data.message,
+          icon: 'error'
+        })
       }
     }
   }

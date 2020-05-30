@@ -34,7 +34,8 @@
     "moment": "^2.24.0",
     "mysql2": "1.7.0",
     "nuxt": "^2.0.0",
-    "sequelize": "5.18.1"
+    "sequelize": "5.18.1",
+    "sweetalert": "2.1.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.0.1",

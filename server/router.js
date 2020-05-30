@@ -3,7 +3,17 @@ const { celebrate, Joi, errors, Segments } = require('celebrate')
 const UserController = require('./controllers/User.js')
 const router = express.Router()
 
-router.put('/api/users/:id/resetPassword', UserController.resetPassword)
+router.put(
+  '/api/users/:id/resetPassword',
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      password: Joi.string()
+        .required()
+        .min(6)
+    })
+  }),
+  UserController.resetPassword
+)
 
 router.get(
   '/api/users/tokens/:token',
@@ -42,6 +52,13 @@ router.post(
 
 router.post(
   '/api/users/sendResetPasswordRequest',
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string()
+        .required()
+        .email()
+    })
+  }),
   UserController.sendResetPasswordRequest
 )
 

@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
 import moment from 'moment'
 export default {
   data() {
@@ -82,8 +83,12 @@ export default {
         })
 
         this.$router.push('/')
-      } catch (err) {
-        throw new Error(err)
+      } catch ({ response }) {
+        swal({
+          title: 'Error',
+          text: response.data.message,
+          icon: 'error'
+        })
       }
     }
   }
