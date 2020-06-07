@@ -35,7 +35,8 @@
     "mysql2": "1.7.0",
     "nuxt": "^2.0.0",
     "sequelize": "5.18.1",
-    "sweetalert": "2.1.2"
+    "sweetalert": "2.1.2",
+    "vee-validate": "3.3.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.0.1",

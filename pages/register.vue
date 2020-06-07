@@ -20,13 +20,16 @@
             >
               Email
             </label>
-            <input
-              id="email"
-              v-model="email"
-              class="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline h-10"
-              type="text"
-              placeholder="Your email address"
-            />
+            <ValidationProvider rules="required" v-slot="{ errors }">
+              <input
+                id="email"
+                v-model="email"
+                class="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline h-10"
+                type="text"
+                placeholder="Your email address"
+              />
+              <p class="text-sm text-red-500 mt-1">{{ errors[0] }}</p>
+            </ValidationProvider>
           </div>
           <div class="mb-6 mt-6">
             <label
