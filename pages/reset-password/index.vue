@@ -12,38 +12,46 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form @submit.prevent="submit">
-          <div>
-            <label
-              for="email"
-              class="block text-sm font-medium leading-5 text-gray-700"
-            >
-              Email
-            </label>
-
-            <div class="mt-1 rounded-md shadow-sm">
-              <input
-                v-model="email"
-                id="email"
-                type="email"
-                required
-                placeholder="you@example.com"
-                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-purple focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-              />
-            </div>
-          </div>
-
-          <div class="mt-6">
-            <span class="block w-full rounded-md shadow-sm">
-              <button
-                type="submit"
-                class="rounded-full tracking-wider  bg-gray-800 hover:bg-gray-900  text-white font-bold text-center py-3 px-8 text-sm uppercase transition transform duration-200 focus:outline-none w-full"
+        <ValidationObserver v-slot="{ handleSubmit }">
+          <form @submit.prevent="handleSubmit(submit)">
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium leading-5 text-gray-700"
               >
-                Send Reset
-              </button>
-            </span>
-          </div>
-        </form>
+                Email
+              </label>
+
+              <div class="mt-1 rounded-md shadow-sm">
+                <ValidationProvider
+                  rules="required|email"
+                  name="Email"
+                  v-slot="{ errors }"
+                >
+                  <input
+                    v-model="email"
+                    type="email"
+                    :class="{ 'border border-solid border-red-500': errors[0] }"
+                    placeholder="you@example.com"
+                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-purple focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                  />
+                  <p class="text-sm text-red-500 mt-1">{{ errors[0] }}</p>
+                </ValidationProvider>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <span class="block w-full rounded-md shadow-sm">
+                <button
+                  type="submit"
+                  class="rounded-full tracking-wider  bg-gray-800 hover:bg-gray-900  text-white font-bold text-center py-3 px-8 text-sm uppercase transition transform duration-200 focus:outline-none w-full"
+                >
+                  Send Reset
+                </button>
+              </span>
+            </div>
+          </form>
+        </ValidationObserver>
       </div>
     </div>
   </div>
@@ -68,7 +76,7 @@ export default {
         console.log('go')
         swal({
           title: 'Error',
-          text: response.data.message,
+          text: response.data,
           icon: 'error'
         })
       }
