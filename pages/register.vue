@@ -33,7 +33,11 @@
                   type="text"
                   placeholder="Your email address"
                 />
-                <p class="text-sm text-red-500 mt-1">{{ errors[0] }}</p>
+                <RevealText>
+                  <p v-if="errors[0]" class="text-sm text-red-500 mt-1">
+                    {{ errors[0] }}
+                  </p>
+                </RevealText>
               </ValidationProvider>
             </div>
             <div class="mb-6 mt-6">
@@ -55,7 +59,11 @@
                   type="password"
                   placeholder="Your password"
                 />
-                <p class="text-sm text-red-500 mt-1">{{ errors[0] }}</p>
+                <RevealText>
+                  <p v-if="errors[0]" class="text-sm text-red-500 mt-1">
+                    {{ errors[0] }}
+                  </p>
+                </RevealText>
               </ValidationProvider>
             </div>
             <div class="flex w-full mt-8">

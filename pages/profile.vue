@@ -1,14 +1,19 @@
 <template>
-  <section v-if="$store.state.user" class="container mx-auto py-3">
-    <div class="ml-4">
-      <div class="text-sm leading-5 font-medium text-gray-900">
-        Account Email
+  <div class="bg-red-100">
+    <section
+      v-if="$store.state.user"
+      class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
+    >
+      <div>
+        <div class="text-sm leading-5 font-medium text-gray-900">
+          Account Email
+        </div>
+        <div class="text-sm leading-5 text-gray-500">
+          {{ $store.state.user.email }}
+        </div>
       </div>
-      <div class="text-sm leading-5 text-gray-500">
-        {{ $store.state.user.email }}
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script>
